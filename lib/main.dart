@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 
+Color color_ = const Color.fromARGB(255, 15, 86, 72);
+
 void main() {
   runApp(const MyApp());
 }
@@ -20,48 +22,20 @@ class MyApp extends StatelessWidget {
           Theme.of(context).textTheme, // keeps default sizes
         ),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+  const MyHomePage({super.key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int? _counter;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      if (_counter != null) {
-        _counter = (_counter ?? 0) + 1;
-      } else {
-        _counter = 1;
-      }
-    });
-  }
-
-  final Random random = Random();
+  /*final Random random = Random();
 
   Color cardCol = const Color.fromARGB(255, 255, 255, 255);
 
@@ -73,8 +47,6 @@ class _MyHomePageState extends State<MyHomePage> {
       random.nextInt(256),
     );
   }
-
-
   void changeColor(){
     setState(() {
       cardCol = getRandomColor();
@@ -83,94 +55,104 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
-    _counter= 5;
     super.initState();
   }
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();  //location
   }
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
   @override
   void didUpdateWidget(covariant MyHomePage oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-  }
+  }*/
+
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
       ),
       body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
         child: SizedBox(
           width: 320,
           child: Card(
-            color: cardCol,
             child: Column(
               children: [
-                Container(
-                  height: 100,
-                  width: 400,
-                  color: const Color.fromARGB(255, 12, 113, 37),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'ISLAMIC UNIVERSITY OF TECHNOLOGY',
-                        style: Theme.of(context).textTheme.headlineLarge
-                            ?.copyWith(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                            ),
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      height: 170,
+                      width: 400,
+                      color: color_,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 5),
+                          Image.asset(
+                            'assets/images/IUT LOGO.png',
+                            height: 60,
+                            width: 60,
+                            fit: BoxFit.contain,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'ISLAMIC UNIVERSITY OF TECHNOLOGY',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headlineLarge
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 16,
+                                  color: const Color.fromARGB(
+                                    255,
+                                    255,
+                                    255,
+                                    255,
+                                  ),
+                                ),
+                          ),
+                        ],
                       ),
-                      Text('$_counter')
-                    ],
-                  ),
+                    ),
+                    Positioned(
+                      bottom: -70,
+                      left: 85,
+                      child: Container(
+                        width: 140,
+                        height: 140,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: color_,
+                            width: 6,
+                          ),
+                        ),
+                        child: ClipRRect(
+                          child: Image.asset(
+                            'assets/images/nufsat.jpg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                CircleAvatar(
-                  child: ClipRRect(
-                    child: Image.asset('assets/images/mob.png', height: 120),
-                  ),
-                  minRadius: 60,
-                ),
+
                 Center(
                   child: SizedBox(
                     width: 180,
                     child: Column(
-                      // axis because Columns are vertical (the cross axis would be
-                      // horizontal).
-                      //
-                      // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-                      // action in the IDE, or press "p" in the console), to see the
-                      // wireframe for each widget.
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
+                        SizedBox(height: 80),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.key),
+                            SizedBox(width: 8,),
                             Text(
                               'Student ID',
                               style: Theme.of(context).textTheme.bodyMedium,
@@ -178,14 +160,29 @@ class _MyHomePageState extends State<MyHomePage> {
                           ],
                         ),
                         Container(
-                          color: const Color.fromARGB(255, 8, 52, 13),
+                          alignment: Alignment.centerLeft,
+                          
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: const Color.fromARGB(255, 15, 86, 72),
+                          ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Icon(Icons.circle),
+                              SizedBox(width: 4,),
+                              Icon(
+                                Icons.circle,
+                                color: const Color.fromARGB(255, 62, 205, 212),
+                                size: 15,
+                              ),
+                              
+                            SizedBox(width: 8,),
                               Text(
                                 '210041115',
-                                style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
+                                style: Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,),
                               ),
                             ],
                           ),
@@ -194,6 +191,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.account_circle),
+                            
+                            SizedBox(width: 8,),
                             Text(
                               'Student Name',
                               style: Theme.of(context).textTheme.bodyMedium,
@@ -205,12 +204,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           children: [
                             Text(
                               'NUFSAT FAROOQUE',
-                                                
+
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 14,
-                                    color: Colors.green,
+                                    color: color_,
                                   ),
                             ),
                           ],
@@ -219,9 +218,18 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.school),
+                            
+                            SizedBox(width: 8,),
                             Text(
-                              'Program B.Sc in CSE',
+                              'Program ',
                               style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Text(
+                              'B.Sc in CSE',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: color_,
+                              ),
+                              
                             ),
                           ],
                         ),
@@ -229,9 +237,17 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.account_balance_sharp),
+                            
+                            SizedBox(width: 8,),
                             Text(
-                              'Department CSE',
+                              'Department ',
                               style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            Text(
+                              'CSE',
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: color_,
+                              ),
                             ),
                           ],
                         ),
@@ -239,29 +255,47 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.location_city),
+                            
+                            SizedBox(width: 8,),
                             Text(
                               'Bangladesh',
-                              style: Theme.of(context).textTheme.bodyMedium,
+                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                color: color_,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ],
                         ),
-                        ElevatedButton(onPressed: changeColor, child: Text('Change Color'))
+
+                        //ElevatedButton(onPressed: changeColor, child: Text('Change Color'))
                       ],
                     ),
                   ),
-                  
                 ),
                 
+                const Spacer(),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  decoration: BoxDecoration(
+                    color: color_,
+                  ),
+                  child: 
+                  Text(
+                    'A subsidiary organ of OIC',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                )
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

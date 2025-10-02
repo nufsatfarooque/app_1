@@ -1,6 +1,8 @@
+
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 Color color_ = const Color.fromARGB(255, 15, 86, 72);
 
@@ -15,20 +17,33 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 255, 255, 255)),
         textTheme: GoogleFonts.poppinsTextTheme(
           Theme.of(context).textTheme, // keeps default sizes
         ),
       ),
-      home: const MyHomePage(),
+      home: const CardInputs(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  const MyHomePage({
+    super.key,
+    required this.program,
+    required this.name,
+    required this.studentID,
+    required this.department,
+    required this.imageBytes,
+    });
+  final String program;
+  final String name;
+  final String studentID;
+  final String department;
+  final Uint8List? imageBytes;
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -69,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void didUpdateWidget(covariant MyHomePage oldWidget) {
     super.didUpdateWidget(oldWidget);
   }*/
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,7 +146,12 @@ class _MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                         child: ClipRRect(
-                          child: Image.asset(
+                          child: widget.imageBytes !=null
+                          ? Image.memory(
+                            widget.imageBytes!,
+                            fit: BoxFit.cover,
+                          )
+                          : Image.asset(
                             'assets/images/nufsat.jpg',
                             fit: BoxFit.cover,
                           ),
@@ -178,7 +198,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               
                             SizedBox(width: 8,),
                               Text(
-                                '210041115',
+                                //'210041115',
+                                widget.studentID,
                                 style: Theme.of(context).textTheme.bodyMedium
                                     ?.copyWith(
                                     color: Colors.white,
@@ -203,8 +224,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              'NUFSAT FAROOQUE',
-
+                              //'NUFSAT FAROOQUE',
+                              widget.name,
                               style: Theme.of(context).textTheme.bodyMedium
                                   ?.copyWith(
                                     fontWeight: FontWeight.w900,
@@ -225,7 +246,8 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Text(
-                              'B.Sc in CSE',
+                              'B.Sc in ${widget.program}',
+                            //,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: color_,
                               ),
@@ -244,7 +266,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
                             Text(
-                              'CSE',
+                              widget.department,
                               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                                 color: color_,
                               ),
@@ -296,6 +318,159 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+}
+
+class CardInputs extends StatefulWidget {
+  const CardInputs({super.key});
+
+  @override
+  State<CardInputs> createState() => _CardInputsState();
+}
+
+class _CardInputsState extends State<CardInputs> {
+  TextEditingController _programController = TextEditingController();
+  TextEditingController _studentIDController = TextEditingController();
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _departmentController = TextEditingController();
+
+  Uint8List? _pickedImageBytes;
+
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image =
+        await picker.pickImage(source: ImageSource.gallery); // can also use camera
+    if (image != null) {
+      final bytes = await image.readAsBytes(); // read as Uint8List
+      setState(() {
+        _pickedImageBytes = bytes as Uint8List?;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _programController.dispose();
+    _nameController.dispose();
+    _studentIDController.dispose();
+    _departmentController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Provide data to generate ID card:',
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                controller: _studentIDController,
+                
+                decoration: InputDecoration(
+                  labelText: 'StudentID',
+                  border: OutlineInputBorder()
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Student Name',
+                  border: OutlineInputBorder()
+                ),
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                
+                controller: _programController,
+                decoration: InputDecoration(
+                  labelText: 'Program',
+                  border: OutlineInputBorder()
+                ),
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                
+                controller: _departmentController,
+                decoration: InputDecoration(
+                  labelText: 'Department',
+                  border: OutlineInputBorder()
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                'Select photo for ID card'
+              ),
+            ),
+             Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: const Icon(Icons.image),
+                label: const Text("Pick Image"),
+                           ),
+             ),
+            if (_pickedImageBytes != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundImage: MemoryImage(_pickedImageBytes! as Uint8List),
+                ),
+              ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: (color_),
+                  foregroundColor: (const Color.fromARGB(255, 255, 255, 255)),
+                ),
+                onPressed: (){
+                  Navigator.push(context, 
+                  MaterialPageRoute(
+                    builder: 
+                    (context) =>
+                    MyHomePage(
+                      program: _programController.text, 
+                      name: _nameController.text, 
+                      studentID: _studentIDController.text,
+                      department: _departmentController.text,
+                      imageBytes: _pickedImageBytes,)));
+                }, 
+                child: Text('Generate Card',
+                style: TextStyle(
+                  color: const Color.fromARGB(221, 255, 255, 255),
+                  fontWeight: FontWeight.w600,
+                ),)),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
